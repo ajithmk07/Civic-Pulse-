@@ -1,0 +1,969 @@
+# MASTER PROMPT: BUILD CIVICPULSE AI FROM SCRATCH
+
+## 1. YOUR ROLE
+
+Act as a senior full-stack software engineer, AI/ML engineer, UI/UX designer, database architect, QA engineer and autonomous development agent.
+
+Your responsibility is to independently design, develop, test, debug and deliver a complete working application called **CivicPulse AI**.
+
+Do not merely provide code snippets, tutorials, suggestions or a project plan. Actually create the project files, implement the application, execute it, test its functionality, fix errors and deliver a working prototype.
+
+Work autonomously wherever possible. Make sensible technical decisions without repeatedly asking me for permission.
+
+Prioritize functional correctness, reliable AI processing, clean architecture, exceptional UI/UX and a compelling hackathon demonstration.
+
+## 2. UNDERSTAND THE HACKATHON PROBLEM
+
+Hackathon: PromptWars x ASTRA – AI for Civic Impact.
+
+Problem statement: From Complaints to Action.
+
+The problem concerns communities experiencing:
+
+- Waterlogging.
+- Damaged roads and potholes.
+- Overflowing garbage bins.
+- Broken streetlights.
+- Drainage blockages.
+- Electrical hazards.
+- Other disrupted public services.
+
+Citizens report these issues through different channels. The same issue may be reported multiple times. Urgent hazards are mixed with routine complaints. Authorities struggle to identify which issues need attention first. Citizens cannot easily track what happens to their complaints.
+
+### Our mission
+
+Build an AI-powered platform that transforms scattered citizen reports into prioritized, explainable and trackable action.
+
+The application must cover all four stages:
+
+1. CAPTURE – Allow citizens to submit complaints with descriptions, photographs, categories and geographical locations.
+2. UNDERSTAND – Use AI to classify, summarize, identify duplicates and calculate priority.
+3. REVEAL – Visualize reports, recurring problems, geographical hotspots and patterns.
+4. ACT – Enable authorities to review, assign, update and resolve complaints while allowing citizens to track progress.
+
+These four stages are mandatory. Do not omit any of them.
+
+## 3. PRODUCT IDENTITY
+
+Application name: CivicPulse AI
+
+Tagline: Turning Civic Complaints into Intelligent Public Action.
+
+Product description:
+
+CivicPulse AI is an intelligent civic issue management platform that connects citizens with municipal authorities. It uses artificial intelligence, geospatial analytics and explainable decision-making to identify recurring civic problems, detect duplicate reports, prioritize urgent issues and help authorities make informed decisions.
+
+The product should feel like a professional civic technology SaaS platform, not a basic college assignment or generic CRUD application.
+
+## 4. TECHNOLOGY STACK
+
+Use the following stack unless a genuine technical incompatibility requires a documented alternative.
+
+### Main application
+- Python 3.11 or newer, using a version compatible with all selected dependencies.
+- Streamlit for the application interface.
+- SQLite for persistent local storage.
+- Pandas for data manipulation.
+
+### AI and machine learning
+- Scikit-learn.
+- TF-IDF vectorization.
+- Cosine similarity.
+- DBSCAN clustering.
+- Optional sentence-transformer embeddings if dependencies and runtime permit.
+- Gemini API or another LLM provider for intelligent summaries and action briefs, if an API key is configured.
+
+### Data visualization
+- Plotly for charts.
+- Folium for geographical maps.
+- Streamlit-Folium for map integration.
+
+### Supporting libraries
+- Geopy for geographical distance calculations.
+- Pillow for image processing.
+- Python standard libraries for validation, timestamps and utility functions.
+
+Use stable and mutually compatible package versions. Generate a requirements.txt file.
+
+Do not introduce unnecessary frameworks or microservices.
+
+The complete application should run locally using one command:
+
+streamlit run app.py
+
+## 5. APPLICATION MODULES
+
+Create four main application modules.
+
+### MODULE A: CITIZEN PORTAL
+
+Build a clean, responsive complaint submission interface.
+
+Features:
+
+1. Citizen can enter a complaint title.
+2. Citizen can describe the problem.
+3. Citizen can select a category.
+4. Citizen can upload one or more photographs.
+5. Citizen can provide geographical coordinates.
+6. Provide a map-based location selection experience if technically feasible.
+7. Provide manual latitude and longitude entry as a fallback.
+8. Citizen can submit the complaint.
+9. Generate a unique complaint tracking ID.
+10. Display a successful submission confirmation.
+11. Show the AI processing results where available.
+
+Categories:
+
+- Road Damage.
+- Waterlogging.
+- Garbage Management.
+- Drainage.
+- Streetlight.
+- Electrical Hazard.
+- Water Supply.
+- Public Infrastructure.
+- Other.
+
+Keep the reporting experience simple enough to complete in under one minute.
+
+Validate all user inputs. Never accept invalid coordinates or empty descriptions.
+
+Do not require citizens to create accounts for the prototype unless it is necessary. Avoid collecting personal information that is not required.
+
+### MODULE B: AUTHORITY DASHBOARD
+
+Create an administrative dashboard for municipal decision-makers.
+
+Display KPI cards:
+
+- Total Reports.
+- Pending Reports.
+- Critical Reports.
+- High Priority Reports.
+- Resolved Reports.
+- Duplicate Reports.
+
+Create a complaint management table with:
+
+- Complaint ID.
+- Title.
+- Category.
+- Location.
+- Priority.
+- Priority score.
+- Submission date.
+- Department.
+- Assigned staff.
+- Current status.
+
+Features:
+
+1. Search complaints.
+2. Filter by category.
+3. Filter by priority.
+4. Filter by status.
+5. Sort by priority score.
+6. View complaint details.
+7. View uploaded images.
+8. View AI-generated summaries.
+9. View duplicate matches.
+10. Assign departments.
+11. Assign responsible staff.
+12. Update complaint status.
+13. Add internal authority notes.
+14. View complaint activity history.
+
+Use these workflow states:
+
+- Submitted.
+- Under Review.
+- Assigned.
+- In Progress.
+- Resolved.
+- Rejected.
+
+Every status change must be saved in SQLite and recorded in an activity log.
+
+Do not implement fake status changes that disappear after refreshing the page.
+
+### MODULE C: AI INTELLIGENCE CENTER
+
+This is the most important differentiating component.
+
+Build a dedicated AI intelligence interface containing the following capabilities.
+
+#### AI FEATURE 1: AUTOMATIC CLASSIFICATION
+
+Automatically identify the most appropriate complaint category based on the description.
+
+Example input:
+
+"There is a huge pothole near the college entrance. Rainwater is collecting inside it and vehicles are almost falling."
+
+Expected analysis:
+
+- Primary category: Road Damage.
+- Secondary category: Waterlogging.
+- Summary: Pothole near the college entrance containing stagnant water and creating a potential road safety hazard.
+- Suggested department: Public Works Department.
+- Safety concern: Yes.
+
+Use an LLM when available or a lightweight classification fallback.
+
+Never allow an API failure to crash the application.
+
+Store the classification result in the database.
+
+#### AI FEATURE 2: AUTOMATIC SUMMARIZATION
+
+Generate a concise and useful summary of each complaint.
+
+The summary must preserve important information:
+
+- What happened?
+- Where did it happen?
+- What is the potential impact?
+- Is there any safety concern?
+
+Do not invent information that is not present in the complaint.
+
+#### AI FEATURE 3: DUPLICATE DETECTION
+
+Implement genuine duplicate detection.
+
+Use TF-IDF vectorization and cosine similarity as the initial method.
+
+For every new report:
+
+1. Retrieve existing complaints.
+2. Compare their descriptions.
+3. Calculate text similarity.
+4. Compare their categories.
+5. Calculate geographical distance using latitude and longitude.
+6. Identify possible matches.
+7. Display matching complaint IDs.
+8. Display similarity percentages and distance.
+9. Allow authorities to confirm or reject duplicate suggestions.
+
+Use configurable thresholds.
+
+Suggested initial matching conditions:
+
+- Text similarity above 0.65.
+- Same or related category.
+- Geographical distance within 150 metres.
+
+These are starting heuristics, not universal rules. Tune them using the synthetic test dataset.
+
+IMPORTANT:
+
+A similarity score does not prove two reports describe the same issue.
+
+Do not automatically delete complaints.
+
+Preserve original citizen submissions. Use duplicate relationships or a canonical complaint relationship.
+
+Allow multiple citizen reports to be linked to one underlying civic issue.
+
+Avoid incorrectly identifying unrelated reports as duplicates simply because they use similar words.
+
+#### AI FEATURE 4: EXPLAINABLE PRIORITY ENGINE
+
+Create a transparent priority calculation system.
+
+Use this initial formula:
+
+Priority Score =
+
+(0.35 × Severity)
++ (0.30 × Urgency)
++ (0.20 × Recurrence)
++ (0.15 × Community Impact)
+
+All input values must be between 0 and 100.
+
+The AI or rules engine should estimate the relevant factors from complaint information.
+
+Use duplicate counts and confirmed related reports to calculate recurrence.
+
+Do not treat unconfirmed duplicate suggestions as verified reports.
+
+Use these priority levels:
+
+- 80–100: Critical.
+- 60–79: High.
+- 35–59: Medium.
+- 0–34: Low.
+
+Provide explanations for every priority decision.
+
+Example:
+
+Priority: Critical
+Score: 89/100
+
+Reasons:
+- Potential vehicle accident risk.
+- High severity.
+- Multiple confirmed reports.
+- Important public location.
+
+Show the factor scores and explain their contributions.
+
+Implement safety overrides for serious hazards, such as exposed electrical wires or immediate danger to life.
+
+The safety override must be visible and explained.
+
+Authorities must be able to override AI recommendations manually, with a recorded reason.
+
+Do not present AI-generated scores as official government decisions.
+
+#### AI FEATURE 5: GEOGRAPHIC HOTSPOT DETECTION
+
+Implement geographical clustering using DBSCAN.
+
+Use latitude and longitude.
+
+Important:
+
+DBSCAN uses distance-sensitive parameters. Do not feed raw latitude and longitude into ordinary Euclidean distance clustering without accounting for geographical coordinates.
+
+Use haversine distance with radians or another geographically appropriate method.
+
+Initial configuration:
+
+- Geographic radius: approximately 200 metres.
+- Minimum cluster size: 3 reports.
+
+Identify:
+
+- Areas with repeated civic problems.
+- Areas with multiple complaint categories.
+- Locations with high-priority complaints.
+- Geographical concentrations of similar reports.
+
+Display hotspots on an interactive map.
+
+Show the number of reports, dominant category and highest priority in each cluster.
+
+Provide a meaningful hotspot explanation.
+
+Example:
+
+"Hotspot detected near College Road. Fourteen reports were submitted within approximately 200 metres. Eight concern road damage and six concern waterlogging. This concentration may indicate a recurring road maintenance or drainage issue."
+
+Do not claim a root cause is confirmed merely because two categories overlap geographically.
+
+Use language such as "possible contributing issue" or "requires inspection".
+
+#### AI FEATURE 6: AI ACTION BRIEF
+
+Create an AI-generated municipal action brief.
+
+Provide a button labelled:
+
+GENERATE ACTION BRIEF.
+
+The generated brief should include:
+
+- Problem summary.
+- Affected location.
+- Number of related reports.
+- Potential impact.
+- Priority level.
+- Evidence supporting the recommendation.
+- Suggested department.
+- Recommended next actions.
+- Safety considerations.
+
+Example:
+
+MUNICIPAL ACTION BRIEF
+
+Location: College Road.
+
+Problem: Repeated pothole complaints and waterlogging.
+
+Evidence: Multiple reports within the same geographical hotspot.
+
+Priority: High.
+
+Recommended action:
+
+1. Inspect the affected road.
+2. Check the drainage system.
+3. Install temporary warning barriers if necessary.
+4. Schedule road maintenance.
+
+Suggested department: Public Works and Drainage.
+
+Every brief must be based on actual stored report data.
+
+If an LLM is unavailable, generate the brief using deterministic templates.
+
+Clearly distinguish AI-generated recommendations from verified facts.
+
+### MODULE D: CITIZEN TRACKING
+
+Build a separate complaint tracking interface.
+
+Citizen enters the complaint tracking ID.
+
+Display:
+
+- Complaint ID.
+- Complaint title.
+- Category.
+- Location.
+- Submission date.
+- Current priority.
+- Current status.
+- Assigned department.
+- Latest public update.
+- Activity timeline.
+
+Citizens should see status changes as authorities update complaints.
+
+Do not expose private internal notes or sensitive administrative information.
+
+## 6. DATABASE DESIGN
+
+Create a properly structured SQLite database.
+
+At minimum, create these tables:
+
+### reports
+
+- report_id: Primary key.
+- title.
+- description.
+- image_path.
+- category.
+- secondary_category.
+- latitude.
+- longitude.
+- ai_summary.
+- severity_score.
+- urgency_score.
+- recurrence_score.
+- impact_score.
+- priority_score.
+- priority_level.
+- department.
+- assigned_staff.
+- status.
+- created_at.
+- updated_at.
+
+### duplicate_links
+
+- id.
+- source_report_id.
+- related_report_id.
+- similarity_score.
+- distance_meters.
+- review_status.
+- confirmed_at.
+
+### activity_log
+
+- id.
+- report_id.
+- previous_status.
+- new_status.
+- public_update.
+- internal_note.
+- changed_by.
+- created_at.
+
+### hotspots
+
+- hotspot_id.
+- latitude.
+- longitude.
+- report_count.
+- dominant_category.
+- priority_level.
+- description.
+- generated_at.
+
+### departments
+
+- department_id.
+- department_name.
+
+Use foreign keys and database constraints where appropriate.
+
+Create database initialization functions.
+
+Use parameterized SQL queries. Never construct SQL using unsafe string concatenation.
+
+Ensure uploaded image files are stored safely and their paths are saved in the database.
+
+Avoid storing unnecessary personal data.
+
+## 7. GEOGRAPHIC MAP EXPERIENCE
+
+Create a professional interactive map.
+
+Display:
+
+- Individual complaint markers.
+- Color-coded priority levels.
+- Hotspot clusters.
+- Complaint category information.
+- Complaint IDs.
+- Location details.
+
+Use distinct marker styles for different priority levels.
+
+Add map filters for:
+
+- Priority.
+- Category.
+- Status.
+- Hotspot visibility.
+
+Make sure the map uses actual database coordinates.
+
+If geographical coordinates are missing, do not invent coordinates.
+
+Show an informative empty state when there are no valid locations.
+
+Provide a fallback list of complaints.
+
+## 8. SYNTHETIC DATA GENERATION
+
+Create a synthetic dataset of at least 50 fictional complaints.
+
+Use fictional citizen identities or anonymous submissions.
+
+Never use real personal information.
+
+Include:
+
+- 15 road damage complaints.
+- 10 waterlogging complaints.
+- 8 garbage complaints.
+- 7 streetlight complaints.
+- 5 drainage complaints.
+- 5 electrical hazard complaints.
+
+Include:
+
+- Deliberate duplicate reports.
+- Similar descriptions with different wording.
+- Reports within the same geographical cluster.
+- High-priority safety issues.
+- Low-priority routine complaints.
+- Different geographical locations.
+- A mixture of resolved and unresolved reports.
+
+Create at least one obvious geographical hotspot.
+
+The dataset must be diverse enough to demonstrate actual AI functionality.
+
+The synthetic data must be generated reproducibly using a fixed random seed.
+
+Provide a button or utility to load demo data.
+
+Never overwrite existing user reports when loading demo data.
+
+Clearly label synthetic reports as demonstration data.
+
+## 9. UI/UX DESIGN REQUIREMENTS
+
+Design a premium, modern civic technology SaaS application.
+
+Visual direction:
+
+- Professional.
+- Minimal.
+- Modern.
+- Clean.
+- Trustworthy.
+- Data-focused.
+- Easy to understand.
+
+Use a consistent design system.
+
+Suggested colors:
+
+- Primary: Deep navy.
+- Secondary: Blue.
+- Accent: Teal.
+- Critical: Red.
+- High: Orange.
+- Medium: Amber.
+- Low: Green.
+- Background: Soft off-white or dark navy depending on theme.
+
+Design requirements:
+
+1. Consistent typography.
+2. Proper spacing.
+3. Clear visual hierarchy.
+4. Attractive KPI cards.
+5. Professional data tables.
+6. Interactive charts.
+7. Responsive layouts.
+8. Clear empty states.
+9. Loading indicators.
+10. Success and error notifications.
+11. Clear status badges.
+12. Intuitive navigation.
+
+Avoid excessive emojis.
+
+Avoid making the application look like a default Streamlit template.
+
+Use custom CSS carefully where appropriate.
+
+Keep accessibility in mind. Do not communicate priority using color alone.
+
+The application should work on desktop and phone-sized screens.
+
+## 10. PROJECT ARCHITECTURE
+
+Use a modular folder structure.
+
+CivicPulse-AI/
+
+    app.py
+    config.py
+    database.py
+    requirements.txt
+    README.md
+    LIMITATIONS.md
+
+    pages/
+        1_Citizen_Portal.py
+        2_Admin_Dashboard.py
+        3_AI_Intelligence.py
+        4_Track_Complaint.py
+
+    ai_engine/
+        classifier.py
+        summarizer.py
+        duplicate_detector.py
+        priority_engine.py
+        hotspot_detector.py
+        action_brief.py
+
+    services/
+        report_service.py
+        assignment_service.py
+        tracking_service.py
+
+    utils/
+        map_utils.py
+        validation.py
+        image_utils.py
+
+    data/
+        sample_reports.csv
+
+    uploads/
+
+    tests/
+        test_database.py
+        test_ai_engine.py
+        test_priority.py
+        test_hotspots.py
+        test_workflow.py
+
+Keep business logic separate from UI code.
+
+Do not create one enormous Python file.
+
+## 11. ERROR HANDLING AND RELIABILITY
+
+Reliability is extremely important.
+
+Follow these rules:
+
+1. Validate every user input.
+2. Handle missing geographical coordinates.
+3. Handle empty complaint descriptions.
+4. Handle unsupported image formats.
+5. Handle oversized uploads.
+6. Handle SQLite connection failures.
+7. Handle duplicate submissions.
+8. Handle unavailable LLM APIs.
+9. Handle invalid API responses.
+10. Handle insufficient data for clustering.
+11. Handle invalid tracking IDs.
+12. Handle missing image files.
+13. Handle repeated database initialization.
+14. Handle Streamlit page refreshes.
+15. Handle empty database states.
+
+Use appropriate exception handling.
+
+Never hide errors silently.
+
+Show friendly error messages to users and log useful debugging details for developers.
+
+Do not expose API keys or sensitive implementation details.
+
+Use environment variables and a .env.example file for optional API credentials.
+
+Do not commit secrets.
+
+Provide deterministic fallback functionality so that the complete application remains usable without an external AI API.
+
+## 12. SECURITY AND DATA INTEGRITY
+
+Implement:
+
+- Input validation.
+- Safe file upload handling.
+- File type restrictions.
+- Upload size limits.
+- Safe database queries.
+- Safe handling of user-provided text.
+- No hardcoded secrets.
+- No unnecessary personal information.
+- Protection against accidental data deletion.
+
+If authentication is not implemented, clearly label the authority interface as a demonstration environment, not a production-secured municipal system.
+
+Never claim production-grade security or live municipal integration unless genuinely implemented.
+
+## 13. TESTING REQUIREMENTS
+
+Create and execute automated tests.
+
+At minimum, test:
+
+### Database
+- Database initializes correctly.
+- Complaint submission works.
+- Complaint retrieval works.
+- Status updates persist.
+- Activity logs are created.
+
+### AI
+- Complaint classification returns valid categories.
+- Summary generation handles empty and malformed inputs.
+- Duplicate detector finds known duplicate examples.
+- Duplicate detector does not classify unrelated reports as duplicates in the test dataset.
+- Priority calculations are mathematically correct.
+- Safety overrides work.
+- Hotspot detection identifies the prepared cluster.
+- Action briefs use actual stored information.
+
+### Application
+- Citizen can submit a report.
+- Authority can view reports.
+- Authority can assign departments.
+- Authority can update statuses.
+- Citizen can track reports.
+- Dashboard statistics update after changes.
+
+Fix all discovered errors before delivery.
+
+Do not merely write tests. Execute them.
+
+## 14. DEMONSTRATION EXPERIENCE
+
+Optimize the application for a five-minute hackathon demonstration.
+
+Prepare this scenario:
+
+1. Open CivicPulse AI.
+2. Submit a new pothole complaint with a location.
+3. Show the AI-generated category and summary.
+4. Show duplicate detection matching an existing complaint.
+5. Show the priority score and its explanation.
+6. Open the geographical hotspot dashboard.
+7. Show recurring reports around the same area.
+8. Generate an action brief.
+9. Assign the complaint to the Public Works Department.
+10. Update its status to In Progress.
+11. Open citizen tracking.
+12. Show the updated complaint status.
+
+The demonstration must work with the included synthetic data.
+
+Do not depend on a live external API for essential demonstration functionality.
+
+## 15. README AND FINAL DOCUMENTATION
+
+Create a comprehensive README.md containing:
+
+- Project introduction.
+- Problem statement.
+- Key features.
+- Technology stack.
+- Architecture.
+- Database design.
+- AI implementation details.
+- Installation instructions.
+- Environment setup.
+- Application startup instructions.
+- Synthetic data loading.
+- Testing instructions.
+- Demo workflow.
+- Known limitations.
+
+Create LIMITATIONS.md explaining:
+
+- Which AI components are implemented.
+- Which components use deterministic rules.
+- Which components use an external LLM.
+- Potential AI classification errors.
+- Duplicate detection limitations.
+- Geographic clustering limitations.
+- Synthetic data limitations.
+- Security limitations.
+- What would be required for actual municipal deployment.
+
+Be transparent about every mocked feature.
+
+## 16. AUTONOMOUS EXECUTION INSTRUCTIONS
+
+Follow this exact execution sequence.
+
+PHASE 1: INSPECTION AND PLANNING
+
+- Inspect the existing working directory.
+- Check the Python version.
+- Check installed dependencies.
+- Create a development plan.
+- Create the folder structure.
+
+Do not delete unrelated existing user files.
+
+PHASE 2: CORE IMPLEMENTATION
+
+- Create database.
+- Implement synthetic data generation.
+- Implement citizen submission.
+- Implement AI modules.
+- Implement admin dashboard.
+- Implement maps and hotspots.
+- Implement resolution workflow.
+- Implement citizen tracking.
+
+PHASE 3: INTEGRATION
+
+- Connect every interface to the same database.
+- Ensure all updates persist.
+- Ensure AI processing happens as part of complaint submission.
+- Ensure dashboard values update dynamically.
+- Ensure tracking displays the latest public status.
+
+PHASE 4: TESTING AND DEBUGGING
+
+- Install missing dependencies.
+- Execute automated tests.
+- Launch the Streamlit application.
+- Inspect terminal errors.
+- Fix syntax errors, import errors, runtime errors and integration problems.
+- Repeat testing until all essential features work.
+
+Do not stop after generating the files.
+
+Do not report that the application works unless you have actually executed and tested it.
+
+PHASE 5: FINAL DELIVERY
+
+Provide:
+
+1. Complete project source code.
+2. requirements.txt.
+3. README.md.
+4. LIMITATIONS.md.
+5. Synthetic dataset.
+6. Automated tests.
+7. Installation instructions.
+8. Exact startup command.
+9. Summary of completed functionality.
+10. List of any remaining limitations.
+
+If hosting is unavailable, deliver a locally runnable application.
+
+## 17. IMPORTANT DEVELOPMENT RULES
+
+- Prioritize a fully functional MVP over excessive features.
+- Never replace real functionality with decorative buttons.
+- Never hardcode dashboard statistics.
+- Never fabricate AI results.
+- Never fabricate geographical locations.
+- Never silently discard submitted complaints.
+- Never delete original reports during duplicate linking.
+- Never let an unavailable API prevent basic application functionality.
+- Never claim tests passed without executing them.
+- Never leave essential functionality as TODO comments.
+- Avoid unnecessary complexity.
+- Keep code readable and modular.
+- Use meaningful function and variable names.
+- Ensure every important action has visible feedback.
+- Preserve user data during application restarts.
+- Make all core features demonstrable without internet access, except optional external services.
+
+If time or technical constraints prevent implementing a bonus feature, prioritize the four mandatory lifecycle stages and explain the limitation.
+
+## 18. DEFINITION OF DONE
+
+The project is considered complete only when all the following conditions are satisfied:
+
+[ ] Application launches successfully.
+
+[ ] Citizen can submit a complaint.
+
+[ ] Complaint is stored persistently in SQLite.
+
+[ ] Unique tracking ID is generated.
+
+[ ] Image upload works.
+
+[ ] Location is captured or manually entered.
+
+[ ] AI classification works.
+
+[ ] Complaint summarization works.
+
+[ ] Duplicate detection works on the prepared dataset.
+
+[ ] Explainable priority scoring works.
+
+[ ] Safety override works.
+
+[ ] Geographic hotspot detection works.
+
+[ ] Interactive map displays actual complaint locations.
+
+[ ] AI action brief is generated from stored reports.
+
+[ ] Authority can assign departments.
+
+[ ] Authority can update complaint status.
+
+[ ] Activity history is maintained.
+
+[ ] Citizen can track complaints.
+
+[ ] Dashboard metrics reflect actual database data.
+
+[ ] Synthetic demo data can be loaded safely.
+
+[ ] Automated tests execute successfully.
+
+[ ] README and limitations documentation exist.
+
+[ ] Five-minute demonstration scenario works from beginning to end.
+
+## FINAL INSTRUCTION
+
+Start building CivicPulse AI now.
+
+Do not respond with another project plan.
+
+Inspect the workspace, create the files, implement the complete application, execute it, test it, debug it and deliver the working result.
+
+Make practical engineering decisions independently.
+
+Your objective is to deliver a reliable, polished and genuinely intelligent hackathon prototype that demonstrates how AI transforms citizen complaints into explainable, prioritized and trackable civic action.

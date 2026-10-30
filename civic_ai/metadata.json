@@ -1,0 +1,6 @@
+{
+  "name": "CivicPulse AI",
+  "description": "Turning Civic Complaints into Intelligent Public Action — AI-powered municipal issue capture, TF-IDF duplicate detection, explainable prioritization, Haversine DBSCAN hotspot clustering, and public complaint tracking.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
